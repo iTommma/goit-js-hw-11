@@ -9,16 +9,19 @@ import axios from'axios'
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '32925042-7db54cf1dcb8f5ff60841ad32';
 
-export const request = query =>{
+// Ф для запросу при ноому пошуку
+export const request = (myQuery, myPage = 1) =>{
+
   return axios.get(`${BASE_URL}`, {
     params: {
       key: API_KEY,
-      q: query,
+      q: myQuery,
       image_type: 'photo',
       orientation: 'horizontal',
-      safesearch: true
+      safesearch: true,
+      page: myPage,
+      per_page: 50
     }
   })
 }
 
-// request('yellow flowers')
