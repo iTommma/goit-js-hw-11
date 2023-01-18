@@ -4,29 +4,44 @@
 // Для повідомлень використана бібліотека notiflix.
 // Код відформатований за допомогою Prettier.
 
+
 import '../css/styles.css';
+
 // // Підключаю notiflix сповіщєння https://github.com/notiflix/Notiflix#readme
 // npm i notiflix
+import Notiflix from 'notiflix';
+// Notiflix.Notify.success('Sol lucet omnibus');
+// Notiflix.Notify.failure('Qui timide rogat docet negare');
+// Notiflix.Notify.warning('Memento te hominem esse');
+// Notiflix.Notify.info('Cogito ergo sum');
 
 // // Знаходжу HTML елементи:
 const searchForm = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery-section');
 const loadMoreButton = document.querySelector('.load-more');
 
-// // Створюю HTML рзмітку галереї
+// // Ф. генеруэ HTML рзмітку галереї
 import { createGallEryList } from './gallery-list';
 
-// // Для пошуку зображень використовую публічний API сервіс Pixabay
+// // API для пошуку зображень, публічний сервіс Pixabay
 import { request } from './pixabay';
 
 // обробляю відповідь з бекенду
 const requestFunction = query => {
   request(query)
     .then(function (response) {
-      console.log(response.data.hits[0]);
+      const items = response.data.hits;
+      console.log('ARR items', items);
 
-      // Створюю галерею
-      gallery.innerHTML = createGallEryList(response.data.hits);
+      // якщо бекенд повертає порожній масив
+      if (items.length === 0){
+        console.log('Array length 0');
+
+      Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+      }
+
+      // Створюю галерею (якщо бекенд повертає повний масив)
+      gallery.innerHTML = createGallEryList(items);
     })
     .catch(function (error) {
       console.log(error);
