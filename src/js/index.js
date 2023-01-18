@@ -5,6 +5,8 @@
 // Код відформатований за допомогою Prettier.
 
 import '../css/styles.css';
+// // Підключаю notiflix сповіщєння https://github.com/notiflix/Notiflix#readme
+// npm i notiflix
 
 // // Знаходжу HTML елементи:
 const searchForm = document.querySelector('.search-form');
@@ -12,35 +14,30 @@ const gallery = document.querySelector('.gallery-section');
 const loadMoreButton = document.querySelector('.load-more');
 
 // // Створюю HTML рзмітку галереї
-import { createGallEryList } from "./gallery-list";
+import { createGallEryList } from './gallery-list';
 
 // // Для пошуку зображень використовую публічний API сервіс Pixabay
-import {request} from './pixabay';
+import { request } from './pixabay';
 
 // обробляю відповідь з бекенду
-const requestFunction = (query) => {
+const requestFunction = query => {
   request(query)
-  .then(function (response) {
-    console.log(response.data.hits[0]);
+    .then(function (response) {
+      console.log(response.data.hits[0]);
 
-    // Створюю галерею
-    
-
-
-    gallery.innerHTML = createGallEryList( response.data.hits[0] );
-  })
-  .catch(function (error) {
-    console.log(error);
-  })
-  .then(function () {
-    // виконується завжди
-  });
-}
-
+      // Створюю галерею
+      gallery.innerHTML = createGallEryList(response.data.hits);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  // .then(function () {
+  //   // виконується завжди
+  // });
+};
 
 // // Ловлю подію в формі пошуку і відправляю пошуковий запрос на бекенд
-searchForm.addEventListener('submit', (e)=>{
-
+searchForm.addEventListener('submit', e => {
   // прибираю оновлення сторінки при сабміті
   e.preventDefault();
 
@@ -49,15 +46,4 @@ searchForm.addEventListener('submit', (e)=>{
 
   // відправляю пошуковий запрос на бекенд
   requestFunction(query);
-})
-
-
-
-
-
-
-
-
-
-
-
+});
