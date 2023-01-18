@@ -11,19 +11,23 @@ const searchForm = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery-section');
 const loadMoreButton = document.querySelector('.load-more');
 
+// // Створюю HTML рзмітку галереї
+import { createGallEryList } from "./gallery-list";
 
 // // Для пошуку зображень використовую публічний API сервіс Pixabay
 import {request} from './pixabay';
 
+// обробляю відповідь з бекенду
 const requestFunction = (query) => {
-  console.log('Query', query);
-
-console.log(request(query));
   request(query)
   .then(function (response) {
-    console.log(response.status);
-    console.dir(response.data.hits[0]);
     console.log(response.data.hits[0]);
+
+    // Створюю галерею
+    
+
+
+    gallery.innerHTML = createGallEryList( response.data.hits[0] );
   })
   .catch(function (error) {
     console.log(error);
@@ -36,11 +40,14 @@ console.log(request(query));
 
 // // Ловлю подію в формі пошуку і відправляю пошуковий запрос на бекенд
 searchForm.addEventListener('submit', (e)=>{
+
+  // прибираю оновлення сторінки при сабміті
   e.preventDefault();
 
+  // виймаю пошуковий запрос з події
   const query = e.target.querySelector('input').value;
-  console.log(query);
 
+  // відправляю пошуковий запрос на бекенд
   requestFunction(query);
 })
 
