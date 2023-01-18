@@ -1,74 +1,56 @@
+// Для HTTP-запитів використана бібліотека axios.
+// Використовується синтаксис async/await.
+
+// Для повідомлень використана бібліотека notiflix.
+// Код відформатований за допомогою Prettier.
+
 import '../css/styles.css';
-const DEBOUNCE_DELAY = 300;
 
-// // встановити lodash.debounce https://www.npmjs.com/package/lodash.debounce
-// $ npm i -g npm
-// $ npm i --save lodash.debounce
-// var debounce = require('lodash.debounce');
+// // Знаходжу HTML елементи:
+const searchForm = document.querySelector('.search-form');
+const gallery = document.querySelector('.gallery-section');
+const loadMoreButton = document.querySelector('.load-more');
 
-// // встановити notiflix https://github.com/notiflix/Notiflix#readme
-// // $ npm i notiflix
-import Notiflix from 'notiflix';
 
-// // імпорт функцій проекту
-import { fetchRestCountries } from './restcountries-api';
-import { createCountryList } from './countries';
-import { createCountryInfo } from './countries';
+// // Для пошуку зображень використовую публічний API сервіс Pixabay
+import {request} from './pixabay';
 
-// // елементи HTML
-const elSearchBox = document.querySelector('#search-box');
-const elCountryList = document.querySelector('.country-list');
-const elCountryInfo = document.querySelector('.country-info');
+const requestFunction = (query) => {
+  console.log('Query', query);
 
-// // обробляю подію
-function onSearchBoxInput (event) {
-  // event.preventDefault();
+console.log(request(query));
+  request(query)
+  .then(function (response) {
+    console.log(response.status);
+    console.dir(response.data.hits[0]);
+    console.log(response.data.hits[0]);
+  })
+  .catch(function (error) {
+    console.log(error);
+  })
+  .then(function () {
+    // виконується завжди
+  });
+}
 
-  // // забираємо зн. з поля вводу
-  const searchedQuery = elSearchBox.value.trim();
-  console.log(searchedQuery);
 
-  // // запит на сервер
-  fetchRestCountries(searchedQuery)
-    .then(data => {
-      // console.dir(data);
+// // Ловлю подію в формі пошуку і відправляю пошуковий запрос на бекенд
+searchForm.addEventListener('submit', (e)=>{
+  e.preventDefault();
 
-      // // перевіряю що віддає сервер
-      // // якщо 1 країну ствоюрюю картку країни
-      if (data.length === 1) {
-        console.log('LENGTH 1');
-        elCountryList.innerHTML = '';
-        elCountryInfo.innerHTML = createCountryInfo(data);
-        return;
-      }
-      // // якщо список до 10 країн створюю HTML список країн
-      if (data.length < 10) {
-        console.log('ARR LENGTH < 10');
-        elCountryInfo.innerHTML = '';
-        elCountryList.innerHTML = createCountryList(data);
-        return;
-      }
-      // // якщо список більше 10 країн
-      console.log('ARR LENGTH > 10');
-      elCountryList.innerHTML = '';
-      elCountryInfo.innerHTML = '';
-      Notiflix.Notify.info(
-        'Too many matches found. Please enter a more specific name.'
-      );
-      return;
-    })
-    .catch(err => {
-      console.log('catch', err);
-      elCountryList.innerHTML = '';
-      elCountryInfo.innerHTML = '';
-      Notiflix.Notify.failure('Oops, there is no country with that name');
-    });
-};
+  const query = e.target.querySelector('input').value;
+  console.log(query);
 
-// // ловлю подію в полі пошуку
-// elSearchBox.addEventListener(
-//   'input',
-//   debounce(event => {
-//     onSearchBoxInput(event);
-//   }, DEBOUNCE_DELAY)
-// );
+  requestFunction(query);
+})
+
+
+
+
+
+
+
+
+
+
+
