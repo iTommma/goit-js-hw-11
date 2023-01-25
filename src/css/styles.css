@@ -10,6 +10,8 @@ body {
   background-color: #fafafa;
   color: #212121;
   line-height: 1.5;
+
+  margin: 0;
 }
 
 #search-box {
@@ -28,6 +30,12 @@ ol {
 
 /* ************************ */
 
+.is-hidden {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  font-size: 1px;
+}
 
 .section {
   /* outline: 1px solid tomato; */
@@ -117,7 +125,7 @@ ol {
 .button-box{
   padding-top: 10px;
   padding-bottom: 10px;
-  margin: 0, auto;
+  margin: 20px auto 70px auto;
 
   display: flex;
   justify-content: center;

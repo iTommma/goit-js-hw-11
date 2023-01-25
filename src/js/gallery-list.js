@@ -28,19 +28,19 @@ export const createGallEryList = items => {
             <img src="${webformatURL}" alt="${tags}" loading="lazy" />
             <div class="info">
             <p class="info-item">
-                <b>Likes</b>
+                <b class="info-titl">Likes</b>
                 ${likes}
             </p>
             <p class="info-item">
-                <b>Views</b>
+                <b class="info-titl">Views</b>
                 ${views}
             </p>
             <p class="info-item">
-                <b>Comments</b>
+                <b class="info-titl">Comments</b>
                 ${comments}
             </p>
             <p class="info-item">
-                <b>Downloads</b>
+                <b class="info-titl">Downloads</b>
                 ${downloads}
             </p>
             </div>

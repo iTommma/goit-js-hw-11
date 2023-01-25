@@ -30,18 +30,18 @@ import { createGallEryList } from './gallery-list';
 // // API для пошуку зображень, публічний сервіс Pixabay
 import { request } from './pixabay';
 
-// обробляю відповідь бекенду стосовно нового пошуку
+// обробляю відповідь бекенду
 const requestFunction = async () => {
   try {
     const req = await request(myQuery, myPage);
-    console.log('req*', req);
+    // console.log('req*', req);
     run(req);
   } catch (err) {
     console.log(err);
   }
 };
 
-// // логіка
+// // логіка:
 function run(response) {
   // масив який повертає бекенд
   const items = response.data.hits;
@@ -60,10 +60,12 @@ function run(response) {
     return;
   }
 
-  // якщо бекенд повертає повний масив: додаю в галерею
+  // якщо бекенд повертає повний масив: створюю галерею
   gallery.insertAdjacentHTML('beforeend', createGallEryList(items));
+  // і відображаю кнопку пагінації
+  loadMoreButton.classList.remove('is-hidden');
 
-  // Повідомлення при 1 видачі пошукового запросу показати загаьну кількість сторінок
+  // Повідомлення: при першій видачі пошукового запросу показати загаьну кількість сторінок
   if ((myPage = 1)) {
     Notiflix.Notify.success(`Hooray! We found totalHits ${totalHits} images.`);
   }
@@ -73,7 +75,8 @@ function run(response) {
     Notiflix.Notify.info(
       `We're sorry, but you've reached the end of search results.`
     );
-    // * приховати кнопку
+    // * приховати кнопку пагынації
+  loadMoreButton.classList.add('is-hidden');
   }
 }
 
