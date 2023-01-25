@@ -9,13 +9,21 @@
 // downloads - кількість завантажень.
 // request('yellow flowers')
 
-export const createGallEryList = (items) => {
-    return items.map( el => {
+export const createGallEryList = items => {
+  return items
+    .map(el => {
+      const {
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      } = el;
 
-        const {webformatURL, largeImageURL, tags, likes, views, comments, downloads} = el;
-  
-        // loading="lazy" - відкладене завантаження;
-        return `
+      // loading="lazy" - відкладене завантаження;
+      return `
         <div class="photo-card">
             <img src="${webformatURL}" alt="${tags}" loading="lazy" />
             <div class="info">
@@ -38,5 +46,6 @@ export const createGallEryList = (items) => {
             </div>
         </div>
         `;
-    }).join('')
-}
+    })
+    .join('');
+};

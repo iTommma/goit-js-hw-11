@@ -6,7 +6,6 @@
 // Пагінація
 // Код відформатований за допомогою Prettier.
 
-
 import '../css/styles.css';
 
 // // Підключаю notiflix сповіщєння https://github.com/notiflix/Notiflix#readme
@@ -32,47 +31,51 @@ import { createGallEryList } from './gallery-list';
 import { request } from './pixabay';
 
 // обробляю відповідь бекенду стосовно нового пошуку
-const requestFunction = () => {
-
-  request(myQuery, myPage)
-    .then(function (response) {
-
-      // масив який повертає бекенд
-      const items = response.data.hits;
-      const totalHits = response.data.totalHits;
-      console.log(response);
-      console.log('ARR items', items);
-
-      // якщо бекенд повертає порожній масив
-      if (items.length === 0){
-        console.log('Array length 0');
-
-        Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-        return
-      }
-      
-      // якщо бекенд повертає повний масив: Створюю галерею
-      gallery.insertAdjacentHTML('beforeend', createGallEryList(items) );
-      
-      // при 1 видачі пошукового запросу показати загаьну кількість сторінок
-      if (myPage = 1){
-        Notiflix.Notify.success(`Hooray! We found totalHits ${totalHits} images.`);
-      }
-
-      // перевірити чи це не остання сторінка видачі, якщо остання показати повідомлення і приховати кнопку
-      if ( (totalHits / 40) < (myPage + 1) ){
-        Notiflix.Notify.info(`We're sorry, but you've reached the end of search results.`);
-        // * приховати кнопку
-      }
-
-    })
-    .catch(function (error) {
-      console.log(error);
-      if (error.response.status === 400 ){
-        // **
-      }
-    });
+const requestFunction = async () => {
+  try {
+    const req = await request(myQuery, myPage);
+    console.log('req*', req);
+    run(req);
+  } catch (err) {
+    console.log(err);
+  }
 };
+
+// // логіка
+function run(response) {
+  // масив який повертає бекенд
+  const items = response.data.hits;
+  const totalHits = response.data.totalHits;
+  // console.log('response*', response);
+  // console.log('req*', req);
+  // console.log('ARR items', items);
+
+  // Повідомлення: якщо бекенд повертає порожній масив
+  if (items.length === 0) {
+    console.log('Array length 0');
+
+    Notiflix.Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+    return;
+  }
+
+  // якщо бекенд повертає повний масив: додаю в галерею
+  gallery.insertAdjacentHTML('beforeend', createGallEryList(items));
+
+  // Повідомлення при 1 видачі пошукового запросу показати загаьну кількість сторінок
+  if ((myPage = 1)) {
+    Notiflix.Notify.success(`Hooray! We found totalHits ${totalHits} images.`);
+  }
+
+  // Повідомлення: перевірити чи це не остання сторінка видачі, якщо остання показати повідомлення і приховати кнопку
+  if (totalHits / 40 < myPage + 1) {
+    Notiflix.Notify.info(
+      `We're sorry, but you've reached the end of search results.`
+    );
+    // * приховати кнопку
+  }
+}
 
 // // Ловлю подію в формі пошуку і відправляю пошуковий запрос на бекенд
 searchForm.addEventListener('submit', e => {
